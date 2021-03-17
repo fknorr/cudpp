@@ -86,6 +86,7 @@ void huffmanEncoding(unsigned int               *d_hist,
 
     dim3 grid_huff(nBlocks, 1, 1);
     dim3 threads_huff(HUFF_THREADS_PER_BLOCK, 1, 1);
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
 
     //---------------------------------------
     //  1) Build histogram from MTF output
@@ -93,13 +94,16 @@ void huffmanEncoding(unsigned int               *d_hist,
     huffman_build_histogram_kernel<<< grid_hist, threads_hist>>>
         ((unsigned int*)d_input, plan->m_d_histograms, numElements);
 
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
+    CUDA_CHECK_ERROR("huffman_build_histogram_kernel");
     //----------------------------------------------------
     //  2) Compute final Histogram + Build Huffman codes
     //----------------------------------------------------
     huffman_build_tree_kernel<<< grid_tree, threads_tree>>>
         (d_input, plan->m_d_huffCodesPacked, plan->m_d_huffCodeLocations, plan->m_d_huffCodeLengths, plan->m_d_histograms,
          d_hist, plan->m_d_nCodesPacked, d_compressedSize, histBlocks, numElements);
-
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
+    CUDA_CHECK_ERROR("huffman_build_tree_kernel");
     //----------------------------------------------
     //  3) Main Huffman encoding step (encode data)
     //----------------------------------------------

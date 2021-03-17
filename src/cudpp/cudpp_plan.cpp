@@ -9,19 +9,20 @@
 // ------------------------------------------------------------- 
 
 #include "cudpp.h"
+#include "cudpp_plan.h"
 #include "cudpp_manager.h"
-#include "cudpp_scan.h"
-#include "cudpp_segscan.h"
-#include "cudpp_compact.h"
-#include "cudpp_spmvmult.h"
-#include "cudpp_stringsort.h"
-#include "cudpp_mergesort.h"
-#include "cudpp_radixsort.h"
-#include "cudpp_reduce.h"
+// #include "cudpp_scan.h"
+// #include "cudpp_segscan.h"
+// #include "cudpp_compact.h"
+// #include "cudpp_spmvmult.h"
+// #include "cudpp_stringsort.h"
+// #include "cudpp_mergesort.h"
+// #include "cudpp_radixsort.h"
+// #include "cudpp_reduce.h"
 #include "cudpp_compress.h"
-#include "cudpp_listrank.h"
+// #include "cudpp_listrank.h"
 #include "cudpp_sa.h"
-#include "cudpp_multisplit.h"
+// #include "cudpp_multisplit.h"
 #include "cuda_util.h"
 #include <cuda_runtime_api.h>
 #include <assert.h>
@@ -34,13 +35,13 @@ CUDPPResult validateOptions(CUDPPConfiguration config, size_t numElements, size_
     if ((config.options & CUDPP_OPTION_EXCLUSIVE) && (config.options & CUDPP_OPTION_INCLUSIVE))
         ret = CUDPP_ERROR_ILLEGAL_CONFIGURATION;
 
-    if (config.algorithm == CUDPP_COMPACT && numRows > 1)
-        ret = CUDPP_ERROR_ILLEGAL_CONFIGURATION; //!< @todo: add support for multi-row cudppCompact
+    // if (config.algorithm == CUDPP_COMPACT && numRows > 1)
+    //     ret = CUDPP_ERROR_ILLEGAL_CONFIGURATION; //!< @todo: add support for multi-row cudppCompact
 
-    if (config.algorithm == CUDPP_TRIDIAGONAL) {
-        if (config.datatype != CUDPP_FLOAT && config.datatype != CUDPP_DOUBLE) 
-            ret = CUDPP_ERROR_ILLEGAL_CONFIGURATION;
-    }
+    // if (config.algorithm == CUDPP_TRIDIAGONAL) {
+    //     if (config.datatype != CUDPP_FLOAT && config.datatype != CUDPP_DOUBLE)
+    //         ret = CUDPP_ERROR_ILLEGAL_CONFIGURATION;
+    // }
 
     return ret;
 }
@@ -99,6 +100,7 @@ CUDPPResult cudppPlan(const CUDPPHandle  cudppHandle,
 
     switch (config.algorithm)
     {
+            /*
     case CUDPP_SCAN:
         {
             plan = new CUDPPScanPlan(mgr, config, numElements, numRows, rowPitch);
@@ -144,6 +146,7 @@ CUDPPResult cudppPlan(const CUDPPHandle  cudppHandle,
             plan = new CUDPPReducePlan(mgr, config, numElements);
             break;
         }
+             */
     case CUDPP_COMPRESS:
         {
             plan = new CUDPPCompressPlan(mgr, config, numElements);
@@ -159,21 +162,25 @@ CUDPPResult cudppPlan(const CUDPPHandle  cudppHandle,
             plan = new CUDPPMtfPlan(mgr, config, numElements);
             break;
         }
+        /*
     case CUDPP_LISTRANK:
         {
             plan = new CUDPPListRankPlan(mgr, config, numElements);
             break;
         }
+         */
     case CUDPP_SA:
         {
             plan = new CUDPPSaPlan(mgr, config, numElements);
             break;
         }
+        /*
     case CUDPP_MULTISPLIT:
         {
             plan = new CUDPPMultiSplitPlan(mgr, config, numElements, numRows);
             break;
         }
+         */
 
     default:
         return CUDPP_ERROR_ILLEGAL_CONFIGURATION; 
@@ -207,6 +214,7 @@ CUDPPResult cudppDestroyPlan(CUDPPHandle planHandle)
 
     switch (plan->m_config.algorithm)
     {
+            /*
     case CUDPP_SCAN:
         {
             delete static_cast<CUDPPScanPlan*>(plan);
@@ -252,6 +260,7 @@ CUDPPResult cudppDestroyPlan(CUDPPHandle planHandle)
             delete static_cast<CUDPPReducePlan*>(plan);
             break;
         }
+             */
     case CUDPP_COMPRESS:
         {
             delete static_cast<CUDPPCompressPlan*>(plan);
@@ -267,21 +276,25 @@ CUDPPResult cudppDestroyPlan(CUDPPHandle planHandle)
             delete static_cast<CUDPPMtfPlan*>(plan);
             break;
         }
+        /*
     case CUDPP_LISTRANK:
         {
             delete static_cast<CUDPPListRankPlan*>(plan);
             break;
         }
+         */
     case CUDPP_SA:
         {
             delete static_cast<CUDPPSaPlan*>(plan);
             break;
         }
+        /*
     case CUDPP_MULTISPLIT:
         {
             delete static_cast<CUDPPMultiSplitPlan*>(plan);
             break;
         }
+         */
     default:
         return CUDPP_ERROR_ILLEGAL_CONFIGURATION; 
         break;
@@ -291,6 +304,7 @@ CUDPPResult cudppDestroyPlan(CUDPPHandle planHandle)
     return CUDPP_SUCCESS;
 }
 
+#if 0
 /** @brief Create a CUDPP Sparse Matrix Object 
   *
   * The sparse matrix plan is a data structure containing state and
@@ -378,6 +392,8 @@ CUDPPResult cudppDestroySparseMatrix(CUDPPHandle sparseMatrixHandle)
     return CUDPP_SUCCESS;
 }
 
+#endif // 0
+
 /** @} */ // end Plan Interface
 /** @} */ // end publicInterface
 
@@ -402,6 +418,8 @@ CUDPPPlan::CUDPPPlan(CUDPPManager *mgr,
   m_planManager(mgr)
 {
 }
+
+#if 0
 
 /** @brief Scan Plan constructor
 * 
@@ -448,13 +466,13 @@ CUDPPSegmentedScanPlan::CUDPPSegmentedScanPlan(CUDPPManager *mgr,
   m_numEltsAllocated(0),
   m_numLevelsAllocated(0)
 {
-    allocSegmentedScanStorage(this);
+    abort(); //allocSegmentedScanStorage(this);
 }
 
 /** @brief SegmentedScan plan destructor */
 CUDPPSegmentedScanPlan::~CUDPPSegmentedScanPlan()
 {
-    freeSegmentedScanStorage(this);
+    abort(); //freeSegmentedScanStorage(this);
 }
 
 /** @brief Compact Plan constructor
@@ -480,20 +498,20 @@ CUDPPCompactPlan::CUDPPCompactPlan(CUDPPManager *mgr,
       CUDPP_SCAN, 
       CUDPP_ADD, 
       CUDPP_UINT, 
-      (config.options & CUDPP_OPTION_BACKWARD) ? 
+      static_cast<unsigned>((config.options & CUDPP_OPTION_BACKWARD) ?
         CUDPP_OPTION_BACKWARD | CUDPP_OPTION_EXCLUSIVE : 
-        CUDPP_OPTION_FORWARD  | CUDPP_OPTION_EXCLUSIVE 
+        CUDPP_OPTION_FORWARD  | CUDPP_OPTION_EXCLUSIVE)
     };
     m_scanPlan = new CUDPPScanPlan(mgr, scanConfig, numElements, numRows, rowPitch);
 
-    allocCompactStorage(this);
+    abort(); //allocCompactStorage(this);
 }
 
 /** @brief Compact plan destructor */
 CUDPPCompactPlan::~CUDPPCompactPlan()
 {
     delete m_scanPlan;
-    freeCompactStorage(this);
+    abort(); //freeCompactStorage(this);
 }
 
 /** @brief Reduce Plan constructor
@@ -506,16 +524,16 @@ CUDPPReducePlan::CUDPPReducePlan(CUDPPManager *mgr,
                                  CUDPPConfiguration config, 
                                  size_t numElements)
 : CUDPPPlan(mgr, config, numElements, 1, 0),
-  m_threadsPerBlock(REDUCE_CTA_SIZE),
+  // m_threadsPerBlock(REDUCE_CTA_SIZE),
   m_maxBlocks(64)
 {
-    allocReduceStorage(this);
+    abort(); //allocReduceStorage(this);
 }
 
 /** @brief Reduce plan destructor */
 CUDPPReducePlan::~CUDPPReducePlan()
 {
-    freeReduceStorage(this);
+    abort(); //freeReduceStorage(this);
 }
 
 /** @brief Merge Sort Plan consturctor
@@ -531,14 +549,14 @@ CUDPPMergeSortPlan::CUDPPMergeSortPlan(CUDPPManager *mgr,
 	m_subPartitions = 4;
 	m_swapPoint = 64;
 	m_numElements = numElements;
-	allocMergeSortStorage(this);
+    abort(); //allocMergeSortStorage(this);
 
 }
 
 /** @brief Merge sort plan destructor */
 CUDPPMergeSortPlan::~CUDPPMergeSortPlan()
 {
-    freeMergeSortStorage(this);
+    abort(); //freeMergeSortStorage(this);
 }
 
 
@@ -569,13 +587,13 @@ CUDPPStringSortPlan::CUDPPStringSortPlan(CUDPPManager *mgr,
 
 	m_scanPlan = new CUDPPScanPlan(mgr, scanConfig, numElements+1, 1, 0);	
 	m_numElements = numElements;
-	allocStringSortStorage(this);	
+    abort(); //allocStringSortStorage(this);
 }
 
 /** @brief String sort plan destructor */
 CUDPPStringSortPlan::~CUDPPStringSortPlan()
 {
-    freeStringSortStorage(this);
+    abort(); //freeStringSortStorage(this);
 }
 /** @brief Radix Sort Plan constructor
 * 
@@ -610,7 +628,7 @@ CUDPPRadixSortPlan::CUDPPRadixSortPlan(CUDPPManager *mgr,
 
     m_scanPlan = new CUDPPScanPlan(mgr, scanConfig, numBlocks2*16, 1, 0);    
         
-    allocRadixSortStorage(this); 
+    allocRadixSortStorage(this);
 }
 
 /** @brief Radix sort plan destructor */
@@ -703,6 +721,8 @@ CUDPPTridiagonalPlan::CUDPPTridiagonalPlan(CUDPPManager *mgr, CUDPPConfiguration
     
 }
 
+#endif // 0
+
 /** @brief CUDPP Compress Plan Constructor
   *
   * @param[in] mgr pointer to the CUDPPManager
@@ -761,6 +781,7 @@ CUDPPMtfPlan::~CUDPPMtfPlan()
     freeMtfStorage(this);
 }
 
+#if 0
 /** @brief CUDPP ListRank Plan Constructor
   *
   * @param[in] mgr pointer to the CUDPPManager
@@ -779,6 +800,8 @@ CUDPPListRankPlan::~CUDPPListRankPlan()
     freeListRankStorage(this);
 }
 
+#endif
+
 /** @brief CUDPP Suffix Array Plan Constructor
   *
   * @param[in] mgr pointer to the CUDPPManager
@@ -796,6 +819,8 @@ CUDPPSaPlan::~CUDPPSaPlan()
 {
     freeSaStorage(this);
 }
+
+#if 0
 
 /** @brief CUDPP MultiSplit Plan Constructor
   *
@@ -824,3 +849,5 @@ CUDPPMultiSplitPlan::~CUDPPMultiSplitPlan()
 {
     freeMultiSplitStorage(this);
 }
+
+#endif

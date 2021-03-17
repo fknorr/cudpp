@@ -41,22 +41,25 @@
  */
 
 #include "cudpp.h"
+#include "cudpp_plan.h"
 #include "cudpp_manager.h"
-#include "cudpp_scan.h"
-#include "cudpp_segscan.h"
-#include "cudpp_compact.h"
-#include "cudpp_spmvmult.h"
-#include "cudpp_mergesort.h"
-#include "cudpp_multisplit.h"
-#include "cudpp_radixsort.h"
-#include "cudpp_rand.h"
-#include "cudpp_reduce.h"
-#include "cudpp_stringsort.h"
-#include "cudpp_tridiagonal.h"
+// #include "cudpp_scan.h"
+// #include "cudpp_segscan.h"
+// #include "cudpp_compact.h"
+// #include "cudpp_spmvmult.h"
+// #include "cudpp_mergesort.h"
+// #include "cudpp_multisplit.h"
+// #include "cudpp_radixsort.h"
+// #include "cudpp_rand.h"
+// #include "cudpp_reduce.h"
+// #include "cudpp_stringsort.h"
+// #include "cudpp_tridiagonal.h"
 #include "cudpp_compress.h"
 #include "cudpp_sa.h"
-#include "cudpp_listrank.h"
+// #include "cudpp_listrank.h"
 #include <stdio.h>
+
+#if 0
 
 /**
  * @brief Performs a scan operation of numElements on its input in
@@ -721,6 +724,8 @@ CUDPPResult cudppTridiagonal(CUDPPHandle planHandle,
         return CUDPP_ERROR_INVALID_HANDLE;
 }
 
+#endif // 0
+
 /**
  * @brief Compresses data stream
  *
@@ -918,6 +923,8 @@ CUDPPResult cudppMoveToFrontTransform(CUDPPHandle planHandle,
         return CUDPP_ERROR_INVALID_HANDLE;
 }
 
+#if 0
+
 /**
  * @brief Performs list ranking of linked list node values
  *
@@ -972,6 +979,8 @@ CUDPPResult cudppListRank(CUDPPHandle planHandle,
     else
         return CUDPP_ERROR_INVALID_HANDLE;
 }
+
+#endif
 
 /**
  * @brief Performs the Suffix Array
@@ -1032,6 +1041,8 @@ CUDPPResult cudppSuffixArray(CUDPPHandle planHandle,
         return CUDPP_ERROR_INVALID_HANDLE;
 
 }
+
+#if 0
 
 /**
  * @brief Splits an array of keys and an optional 
@@ -1139,6 +1150,8 @@ CUDPPResult cudppMultiSplitCustomBucketMapper(const CUDPPHandle planHandle,
         return CUDPP_ERROR_INVALID_HANDLE;
     }
 }
+
+#endif
 
 /** @} */ // end Algorithm Interface
 /** @} */ // end of publicInterface group

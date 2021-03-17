@@ -80,30 +80,6 @@ option(CUDPP_GENCODE_SM50
        "ON to generate code for Compute Capability 5.0 devices (e.g. GeForce GTX 750)"
        OFF)
 
-if (CUDPP_GENCODE_SM12)
-  set(GENCODE ${GENCODE} ${GENCODE_SM12})
-endif(CUDPP_GENCODE_SM12)
-
-if (CUDPP_GENCODE_SM13)
-  set(GENCODE ${GENCODE} ${GENCODE_SM13})
-endif(CUDPP_GENCODE_SM13)
-
-if (CUDPP_GENCODE_SM20)
-  set(GENCODE ${GENCODE} ${GENCODE_SM20})
-endif(CUDPP_GENCODE_SM20)
-
-if (CUDPP_GENCODE_SM30)
-  set(GENCODE ${GENCODE} ${GENCODE_SM30})
-endif(CUDPP_GENCODE_SM30)
-
-if (CUDPP_GENCODE_SM35)
-  set(GENCODE ${GENCODE} ${GENCODE_SM35})
-endif(CUDPP_GENCODE_SM35)
-
-if (CUDPP_GENCODE_SM50)
-  set(GENCODE ${GENCODE} ${GENCODE_SM50})
-endif(CUDPP_GENCODE_SM50)
-
 if (CUDA_VERBOSE_PTXAS)
   set(VERBOSE_PTXAS --ptxas-options=-v)
 endif (CUDA_VERBOSE_PTXAS)
@@ -133,16 +109,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   # https://github.com/cudpp/cudpp/wiki/BuildingCUDPPWithMavericks
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-cuda_add_library(cudpp_hash ${LIB_TYPE}
+add_library(cudpp_hash ${LIB_TYPE}
   ${CCFILES}
   ${HFILES}
   ${CUHFILES}
   ${HFILES_PUBLIC}
   ${CUFILES}
-  OPTIONS ${GENCODE_SM20} ${VERBOSE_PTXAS}
-  )
+)
 
-target_link_libraries(cudpp_hash cudpp)
+target_link_libraries(cudpp_hash cudpp CUDA::cudart)
 
 install(FILES ${HFILES_PUBLIC}
   DESTINATION include

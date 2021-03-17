@@ -1,12 +1,10 @@
-project(cudpp)
+project(cudpp C CUDA)
 
 set(cudpp_VERSION_MAJOR 2)
 set(cudpp_VERSION_MINOR 3)
 set(cudpp_VERSION_PATCH 0)
 
 cmake_minimum_required(VERSION 2.8)
-
-find_package(CUDA REQUIRED)
 
 option(CUDPP_BUILD_SHARED_LIBS
   "On to build shared libraries, off for static libraries."
@@ -44,7 +42,6 @@ set(CMAKE_MODULE_PATH
 set(cudpp_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/ext/moderngpu/include/
-  ${CMAKE_SOURCE_DIR}/ext/cub/
   )
 include_directories(${cudpp_INCLUDE_DIRS})
 
@@ -117,7 +114,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 add_subdirectory(src/cudpp)
-add_subdirectory(src/cudpp_hash)
+# add_subdirectory(src/cudpp_hash)
 
 if (CUDPP_BUILD_APPLICATIONS)
   add_subdirectory(apps/cudpp_testrig)
@@ -129,7 +126,7 @@ endif (CUDPP_BUILD_APPLICATIONS)
 # Make files that store configuration to help dependent CMake files use
 # these libraries.
 export(
-  TARGETS cudpp cudpp_hash
+  TARGETS cudpp # cudpp_hash
   FILE ${LIBRARY_OUTPUT_PATH}/cudpp-targets.cmake
   )
 

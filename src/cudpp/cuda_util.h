@@ -47,4 +47,14 @@
     }
 #endif
 
+template<typename T>
+__host__ T max(T a, T b) {
+    return a > b ? a : b;
+}
+
+template<typename T>
+__host__ T min(T a, T b) {
+    return a > b ? a : b;
+}
+
 #endif

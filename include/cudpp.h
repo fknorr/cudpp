@@ -127,22 +127,22 @@ enum CUDPPOperator
 */
 enum CUDPPAlgorithm
 {
-    CUDPP_SCAN,              //!< Scan or prefix-sum
-    CUDPP_SEGMENTED_SCAN,    //!< Segmented scan
-    CUDPP_COMPACT,           //!< Stream compact
-    CUDPP_REDUCE,            //!< Parallel reduction
-    CUDPP_SORT_RADIX,        //!< Radix sort
-    CUDPP_SORT_MERGE,        //!< Merge Sort
-    CUDPP_SORT_STRING,       //!< String Sort
-    CUDPP_SPMVMULT,          //!< Sparse matrix-dense vector multiplication
-    CUDPP_RAND_MD5,          //!< Pseudorandom number generator using MD5 hash algorithm
-    CUDPP_TRIDIAGONAL,       //!< Tridiagonal solver algorithm
+    // CUDPP_SCAN,              //!< Scan or prefix-sum
+    // CUDPP_SEGMENTED_SCAN,    //!< Segmented scan
+    // CUDPP_COMPACT,           //!< Stream compact
+    // CUDPP_REDUCE,            //!< Parallel reduction
+    // CUDPP_SORT_RADIX,        //!< Radix sort
+    // CUDPP_SORT_MERGE,        //!< Merge Sort
+    // CUDPP_SORT_STRING,       //!< String Sort
+    // CUDPP_SPMVMULT,          //!< Sparse matrix-dense vector multiplication
+    // CUDPP_RAND_MD5,          //!< Pseudorandom number generator using MD5 hash algorithm
+    // CUDPP_TRIDIAGONAL,       //!< Tridiagonal solver algorithm
     CUDPP_COMPRESS,          //!< Lossless data compression
-    CUDPP_LISTRANK,          //!< List ranking
+    // CUDPP_LISTRANK,          //!< List ranking
     CUDPP_BWT,               //!< Burrows-Wheeler transform
     CUDPP_MTF,               //!< Move-to-Front transform
     CUDPP_SA,                //!< Suffix Array algorithm
-    CUDPP_MULTISPLIT,        //!< Multi-Split algorithm
+    // CUDPP_MULTISPLIT,        //!< Multi-Split algorithm
     CUDPP_ALGORITHM_INVALID, //!< Placeholder at end of enum
 };
 
@@ -218,6 +218,7 @@ CUDPPResult cudppDestroyPlan(CUDPPHandle plan);
 
 // Scan and sort algorithms
 
+/*
 CUDPP_DLL
 CUDPPResult cudppScan(const CUDPPHandle planHandle,
                       void        *d_out, 
@@ -322,6 +323,8 @@ CUDPPResult cudppTridiagonal(CUDPPHandle planHandle,
                              int systemSize, 
                              int numSystems);
 
+*/
+
 // lossless data compression algorithms
 CUDPP_DLL
 CUDPPResult cudppCompress(CUDPPHandle planHandle, 
@@ -349,6 +352,7 @@ CUDPPResult cudppMoveToFrontTransform(CUDPPHandle planHandle,
                                       unsigned char *d_out,
                                       size_t numElements);
 
+/*
 // List ranking
 CUDPP_DLL
 CUDPPResult cudppListRank(CUDPPHandle planHandle, 
@@ -358,6 +362,8 @@ CUDPPResult cudppListRank(CUDPPHandle planHandle,
                           size_t head,
                           size_t numElements);
 
+ */
+
 // Suffix Array Construction(skew algorithm)
 CUDPP_DLL
 CUDPPResult cudppSuffixArray(CUDPPHandle planHandle,
@@ -365,6 +371,7 @@ CUDPPResult cudppSuffixArray(CUDPPHandle planHandle,
                              unsigned int *d_keys_sa,
                              size_t numElements);
 
+/*
 // MultiSplit
 CUDPP_DLL
 CUDPPResult cudppMultiSplit(const CUDPPHandle planHandle,
@@ -381,6 +388,7 @@ CUDPPResult cudppMultiSplitCustomBucketMapper(const CUDPPHandle planHandle,
                                               size_t            numElements,
                                               size_t            numBuckets,
                                               BucketMappingFunc bucketMappingFunc);
+*/
 
 #ifdef __cplusplus
 }
