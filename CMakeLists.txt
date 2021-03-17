@@ -16,25 +16,6 @@ option(CUDPP_BUILD_APPLICATIONS
   OFF
   )
 
-option(CUDA_VERBOSE_PTXAS
-  "On to enable verbose output from the PTXAS assembler."
-  OFF
-  )
-
-## Set the directory where the binaries will be stored
-set(EXECUTABLE_OUTPUT_PATH
-  ${PROJECT_BINARY_DIR}/bin
-  CACHE PATH
-  "Directory where all executables will be stored"
-  )
-
-## Set the directory where the libraries will be stored
-set(LIBRARY_OUTPUT_PATH
-  ${PROJECT_BINARY_DIR}/lib
-  CACHE PATH
-  "Directory where all the libraries will be stored"
-  )
-
 set(CMAKE_MODULE_PATH
   ${CMAKE_SOURCE_DIR}/cmake
   )
@@ -89,9 +70,6 @@ file(COPY bin/win32/glut32.dll bin/win32/glew32.dll DESTINATION bin/)
 endif (bits EQUAL 64)
 endif (WIN32)
 
-# copy data files
-#file(COPY apps/data DESTINATION apps)
-
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   exec_program(uname ARGS -v  OUTPUT_VARIABLE DARWIN_VERSION)
   string(REGEX MATCH "[0-9]+" DARWIN_VERSION ${DARWIN_VERSION})
@@ -114,50 +92,3 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 add_subdirectory(src/cudpp)
-# add_subdirectory(src/cudpp_hash)
-
-if (CUDPP_BUILD_APPLICATIONS)
-  add_subdirectory(apps/cudpp_testrig)
-  add_subdirectory(apps/cudpp_hash_testrig)
-  add_subdirectory(apps/simpleCUDPP)
-  #add_subdirectory(apps/satGL)
-endif (CUDPP_BUILD_APPLICATIONS)
-
-# Make files that store configuration to help dependent CMake files use
-# these libraries.
-export(
-  TARGETS cudpp # cudpp_hash
-  FILE ${LIBRARY_OUTPUT_PATH}/cudpp-targets.cmake
-  )
-
-set(cudpp_INCLUDE_DIRS_CONFIG ${cudpp_INCLUDE_DIRS})
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cudpp-config.cmake.in
-  ${LIBRARY_OUTPUT_PATH}/cudpp-config.cmake
-  @ONLY
-  )
-
-set(cudpp_INCLUDE_DIRS_CONFIG "\${_install_dir}/include")
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cudpp-config.cmake.in
-  ${LIBRARY_OUTPUT_PATH}/cudpp-config.cmake.install
-  @ONLY
-  )
-install(FILES ${LIBRARY_OUTPUT_PATH}/cudpp-config.cmake.install
-  DESTINATION lib
-  RENAME cudpp-config.cmake
-  )
-
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cudpp-config-version.cmake.in
-  ${LIBRARY_OUTPUT_PATH}/cudpp-config-version.cmake
-  @ONLY
-  )
-install(FILES ${LIBRARY_OUTPUT_PATH}/cudpp-config-version.cmake
-  DESTINATION lib
-  )
-
-set(CPACK_PACKAGE_VERSION_MAJOR ${cudpp_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${cudpp_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${cudpp_VERSION_PATCH})
-include(CPack)
