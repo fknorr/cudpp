@@ -198,6 +198,7 @@ void ComputeSA(unsigned int* d_str,
     if(!unique[0])
     {
         // Inclusive scan to compute the ranks of SA12
+        auto plan_m_d_new_str_before = plan->m_d_new_str;
         plan->m_d_new_str = ((stage==0) ? plan->m_d_new_str :
                                           plan->m_d_new_str+offset+3);
 
@@ -227,6 +228,7 @@ void ComputeSA(unsigned int* d_str,
                (plan->m_d_keys_srt_12, plan->m_d_isa_12, d_keys_sa, mod_1,
                 tThreads1);
 
+        plan->m_d_new_str = plan_m_d_new_str_before;
      }
 
 // SA12 already fully sorted with results stored in d_keys_srt_12
